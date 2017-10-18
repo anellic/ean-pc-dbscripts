@@ -8,15 +8,17 @@
 # Modified by Jon Arce <jon_arce@hotmail.com> to add timing, messaging 
 # and allow for custom delimiter parameter
 #
-#python csv2sqlite.py giata_general.csv ./sqlite_data/eanmap.db giatageneral
+# python csv2sqlite.py giata_general.csv ./sqlite_data/eanmap.db giatageneral
 from __future__ import print_function
 
 import sys
 import argparse
 import csv
 import sqlite3
+
+
 # local timing function to see how long it takes
-#import timing
+# import timing
 
 def convert(filepath_or_fileobj, csv_delimiter, dbpath, table):
     ##print(csv_delimiter)
@@ -25,27 +27,27 @@ def convert(filepath_or_fileobj, csv_delimiter, dbpath, table):
     else:
         fo = filepath_or_fileobj
 
-    dialect = csv.Sniffer().sniff(fo.readline(),delimiters=csv_delimiter)
+    dialect = csv.Sniffer().sniff(fo.readline(), delimiters=csv_delimiter)
     fo.seek(0)
 
-    reader = csv.reader(fo, dialect,delimiter=csv_delimiter)
+    reader = csv.reader(fo, dialect, delimiter=csv_delimiter)
     types = _guess_types(reader)
     fo.seek(0)
 
-    reader = csv.reader(fo, dialect,delimiter=csv_delimiter)
+    reader = csv.reader(fo, dialect, delimiter=csv_delimiter)
     headers = [header.strip() for header in reader.next()]
     ##print(headers)
 
     _columns = ','.join(
-        ['"%s" %s' % (header, _type) for (header,_type) in zip(headers, types)]
-        )
+        ['"%s" %s' % (header, _type) for (header, _type) in zip(headers, types)]
+    )
 
     conn = sqlite3.connect(dbpath)
     # shz: fix error with non-ASCII input
     conn.text_factory = str
     c = conn.cursor()
 
-	# try to create the table, if it error out table already exist
+    # try to create the table, if it error out table already exist
     try:
         create_query = 'CREATE TABLE %s (%s)' % (table, _columns)
         c.execute(create_query)
@@ -53,7 +55,7 @@ def convert(filepath_or_fileobj, csv_delimiter, dbpath, table):
         pass
 
     _insert_tmpl = 'INSERT INTO %s VALUES (%s)' % (table,
-        ','.join(['?']*len(headers)))
+                                                   ','.join(['?'] * len(headers)))
 
     line = 0
     for row in reader:
@@ -67,7 +69,7 @@ def convert(filepath_or_fileobj, csv_delimiter, dbpath, table):
                 None if x == ''
                 else float(x.replace(',', '')) if y == 'real'
                 else int(x) if y == 'integer'
-                else x for (x,y) in zip(row, types) ]
+                else x for (x, y) in zip(row, types)]
             ##print(row)
             c.execute(_insert_tmpl, row)
         except ValueError, e:
@@ -75,9 +77,9 @@ def convert(filepath_or_fileobj, csv_delimiter, dbpath, table):
         except Exception, e:
             print("Error on line %d: %s" % (line, e), file=sys.stderr)
 
-
     conn.commit()
     c.close()
+
 
 def _guess_types(reader, max_sample_size=100):
     '''Guess column types (as for SQLite) of CSV.
@@ -95,30 +97,30 @@ def _guess_types(reader, max_sample_size=100):
         ('real', float),
         ('integer', int)
         # 'date',
-        ]
+    ]
     # for each column a set of bins for each type counting successful casts
     perresult = {
         'integer': 0,
         'real': 0,
         'text': 0
-        }
+    }
 
-    results = [ dict(perresult) for x in range(len(_headers)) ]
-    sample_counts = [ 0 for x in range(len(_headers)) ]
+    results = [dict(perresult) for x in range(len(_headers))]
+    sample_counts = [0 for x in range(len(_headers))]
 
-    for row_index,row in enumerate(reader):
-        for column,cell in enumerate(row):
+    for row_index, row in enumerate(reader):
+        for column, cell in enumerate(row):
             cell = cell.strip()
             if len(cell) == 0:
                 continue
 
             # replace ',' with '' to improve cast accuracy for ints and floats
-            if(cell.count(',') > 0):
-               cell = cell.replace(',', '')
-               if(cell.count('E') == 0):
-                  cell = cell + "E0"
+            if (cell.count(',') > 0):
+                cell = cell.replace(',', '')
+                if (cell.count('E') == 0):
+                    cell = cell + "E0"
 
-            for data_type,cast in options:
+            for data_type, cast in options:
                 try:
                     cast(cell)
                     results[column][data_type] += 1
@@ -127,14 +129,14 @@ def _guess_types(reader, max_sample_size=100):
                     pass
 
         have_max_samples = True
-        for column,cell in enumerate(row):
+        for column, cell in enumerate(row):
             if sample_counts[column] < max_sample_size:
                 have_max_samples = False
 
         if have_max_samples:
             break
 
-    for column,colresult in enumerate(results):
+    for column, colresult in enumerate(results):
         for _type, _ in options:
             if colresult[_type] > 0 and colresult[_type] >= colresult[types[column]]:
                 types[column] = _type
@@ -149,9 +151,11 @@ The database is created if it does not yet exist.
 ''')
     parser.add_argument('csv_file', type=str, help='Input CSV file path')
     parser.add_argument('sqlite_db_file', type=str, help='Output SQLite file')
-    parser.add_argument('table_name', type=str, nargs='?', help='Name of table to write to in SQLite file', default='data')
+    parser.add_argument('table_name', type=str, nargs='?', help='Name of table to write to in SQLite file',
+                        default='data')
     parser.add_argument('delimiter_char', type=str, nargs='?', help='CSV field delimiter', default=',')
     args = parser.parse_args()
-    print("csv2sqlite-working... file(%s) delimiter char(%s) db(%s) table(%s)" % (args.csv_file, args.delimiter_char, args.sqlite_db_file, args.table_name))
+    print("csv2sqlite-working... file(%s) delimiter char(%s) db(%s) table(%s)" % (
+    args.csv_file, args.delimiter_char, args.sqlite_db_file, args.table_name))
     convert(args.csv_file, args.delimiter_char, args.sqlite_db_file, args.table_name)
     print("csv2sqlite-done.")

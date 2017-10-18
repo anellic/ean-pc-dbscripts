@@ -11,10 +11,11 @@
 ### Environment ###
 STARTTIME=$(date +%s)
 ## for Linux: CHKSUM_CMD=mdsum
+## for MAC CHKSUM_CMD=shasum
+## for Cygwin under Windows use CHKSUM_CMD=md5deep
 ## cksum should be available in all Unix versions
 ## leave empty for faster processing
-##CHKSUM_CMD=shasum
-CHKSUM_CMD=
+CHKSUM_CMD=md5deep
 ## for Linux: MYSQL_DIR=/usr/bin/
 MYSQL_DIR=/usr/local/mysql/bin/
 # for simplicity I added the MYSQL bin path to the Windows 
@@ -33,7 +34,7 @@ MYSQL_DB=eanprod
 MYSQL_PORT=3306
 MYSQL_PROTOCOL=TCP
 # home directory of the user (in our case "/home/eanuser")
-HOME_DIR=/Users/jarce
+HOME_DIR=/Users/jon
 ## directory under HOME_DIR
 FILES_DIR=eanfiles
 ## Amount of days to keep in the log
