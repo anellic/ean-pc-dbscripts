@@ -1,7 +1,0 @@
-here are the two Store procedures to use, to generate all the required XML import files and to upload the files.
-
-Use following to run the sp's from the .bat file:
-sqlcmd -E -S %MSSQL_ENGINE% -d %MSSQL_DB% -Q "EXEC spGenerateFormatFile @targetTable = '%%i'"
-sqlcmd -E -S %MSSQL_ENGINE% -d %MSSQL_DB% -Q "EXEC spOneToRuleThemAll @fromFile = '%FILES_DIR%\%%i.txt', @formatFile='%BCPXML_DIR%\%%i.xml',@targetTable = '%%i'"
-
-Only downside is that you need to enable xp_cmdshell which ppl might think is a security risk.
