@@ -1,7 +1,7 @@
 ean-pc-dbscripts
 ================
 
-Partner Connect database scripts for Partners to create relational database based on V2 downloadable files.
+Partner Connect database scripts for Partners to create relational database based on V3 downloadable files.
 -----------------------------------------------------------------------------------------------------------
 
 NOTE*: The script has been update to work with SQLite 3.11.0 or MariaDB 10.1.22. SQLite is ONLY recommended to learn about the database, and/or portable devices (tablets & phones). We now consider MariaDB to be our default host database.
@@ -10,7 +10,7 @@ If you are using MySQL, all MariaDB scripts should work; but these are sample sc
 
 HOW-TO USE:
 1. Select either MariaDB / SQLite
-2. Create the "enaprod" database structure using your selected database management tool.
+2. Create the "eanprod" database structure using your selected database management tool.
 1. MariaDB_create_eanprod.sql - This create all of "eanprod" database structure from scratch, indexes and stored procedures as well.
 2. MySQL_extend_eanprod_xx_XX.sql - This will add tables to support extra languages, it will need to be edited to the proper LOCALE information (like es_es for Spanish/Spain). You may run it multiple times to generate structures for multiple languages.
 3. EAN_MariaDB_refresh.sh - The script that updates the database, the top lines will need to be adjusted for database name, dbserver, user name, password, etc. Run this to populate and refresh the database.
