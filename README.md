@@ -12,8 +12,8 @@ HOW-TO USE:
 1. Select either MariaDB / SQLite
 2. Create the "enaprod" database structure using your selected database management tool.
 1. MariaDB_create_eanprod.sql - This create all of "eanprod" database structure from scratch, indexes and stored procedures as well.
-2. MySQL_extend_eanprod_xx_XX.sql - This will add tables to support extra languages, it will need to be edited to the proper LOCALE information (like es_es for Spanish/Spain).
-3. EAN_MariaDB_refresh.sh - The script that updates the database, the top lines will need to be adjusted for database name, dbserver, user name, password, etc. Run this to create the database.
+2. MySQL_extend_eanprod_xx_XX.sql - This will add tables to support extra languages, it will need to be edited to the proper LOCALE information (like es_es for Spanish/Spain). You may run it multiple times to generate structures for multiple languages.
+3. EAN_MariaDB_refresh.sh - The script that updates the database, the top lines will need to be adjusted for database name, dbserver, user name, password, etc. Run this to populate and refresh the database.
 
  MySQL Version 5.6+ changed the security model, you need to FIRST use:
  mysql_config_editor set --login-path=local --host=localhost --user=localuser –password
@@ -30,12 +30,6 @@ HOW-TO USE:
 -> EAN Database Working with Geography - Documentation showing how to relate tables to solve geography, using the stored procedures to support even better (more accurate) searches. 
 -> Using external data to add geography information. It includes the geonames table usage to solve questions like: nearby Train Stations.
 
-New Geography correct information:
-Our data lack the proper StateProvince for a lot of countries, we created the script:
--> get_real_address.pl - use the Nominatim API from OpenStreetMap.org to discover the real address of a given GPS point. Currently wired to the activepropertylist but you could use it for any of the tables with latitude & longitude information. 
-
-/MAC - Mac adjusted versions of the scripts
- It include my compiled version of the wget utility that is REQUIRED for this scripts to work.
 
 ** Use of these scripts are at your own risk. The scripts are provided “as is” without any warranty of any kind and Expedia disclaims any and all liability regarding any use of the scripts. **
 
