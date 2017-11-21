@@ -5,7 +5,7 @@ Partner Connect database scripts for Partners to create relational database base
 -----------------------------------------------------------------------------------------------------------
 
 NOTE*: The script has been update to work with SQLite 3.11.0 or MariaDB 10.1.22. SQLite is ONLY recommended to learn about the database, and/or portable devices (tablets & phones). We now consider MariaDB to be our default host database.
-
+Latest version included NEW Coordinates list file of Train and Metro Stations.
 If you are using MySQL, all MariaDB scripts should work; but these are sample scripts to speed up your deployment, Expedia nor EAN directly support any database products and/or tools.
 
 HOW-TO USE:
