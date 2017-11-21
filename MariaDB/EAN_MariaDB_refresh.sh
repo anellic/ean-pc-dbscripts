@@ -26,7 +26,6 @@ MYSQL_DIR=/usr/bin/
 MYSQL_HOST=localhost
 MYSQL_USER=eanuser
 MYSQL_PASS=Passw@rd1
-
 MYSQL_DB=eanprod
 MYSQL_PORT=3306
 MYSQL_PROTOCOL=TCP
@@ -131,7 +130,7 @@ do
  	## unzip the files, save the exit value to check for errors
 	## BSD does not support same syntax, but there is no need in MAC OS as Linux (unzip -L `find -iname $FILE.zip`)
     unzip -L -o $FILE.zip
-	ZIPOUT=$?
+    ZIPOUT=$?
     ## rename files to CamelCase format
     mv `echo $FILE | tr \[A-Z\] \[a-z\]`.txt $FILE.txt
     ## special fix for DiningDescriptionLIst naming error
