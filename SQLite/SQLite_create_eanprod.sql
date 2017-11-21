@@ -32,6 +32,14 @@ CREATE INDEX IF NOT EXISTS `roomtypelist_idx` ON `roomtypelist` (
 	`EANHotelID`,
 	`RoomTypeID`
 );
+CREATE TABLE IF NOT EXISTS `trainmetrostationcoordinateslist` (
+	RegionID 	integer,
+	RegionName 	text,
+	RegionType 	text,
+  	Latitude	decimal ( 9 , 6 ) DEFAULT NULL,
+	Longitude	decimal ( 9 , 6 ) DEFAULT NULL,
+	PRIMARY KEY(`RegionID`)
+);
 CREATE TABLE IF NOT EXISTS `regioneanhotelidmapping` (
 	`RegionID`	int ( 11 ) NOT NULL,
 	`EANHotelID`	int ( 11 ) NOT NULL,
