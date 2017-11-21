@@ -69,6 +69,7 @@ RegionCenterCoordinatesList
 RegionEANHotelIDMapping
 RoomTypeList
 SpaDescriptionList
+TrainMetroStationCoordinatesList
 WhatToExpectList
 #
 # minorRev=25 added files
@@ -131,8 +132,15 @@ do
     	CHKSUM_PREV=0
 	fi
     ## download the files via HTTP (no need for https), using time-stamping, -nd no host directories
-    ## wget  -t 30 --no-verbose -r -N -nd http://www.ian.com/affiliatecenter/include/V2/$FILE.zip
-    curl -O http://www.ian.com/affiliatecenter/include/V2/$FILE.zip
+    ## download the files via HTTP (no need for https)
+    if [[ "$FILE" =~ ^(TrainMetroStationCoordinatesList|RegionEANHotelIDMapping|RegionCenterCoordinatesList|ParentRegionList|NeighborhoodCoordinatesList|CityCoordinatesList|CountryList|AirportCoordinatesList)$ ]]; then 
+    	echo "Working on /new/$FILE.txt ..."
+        curl -O http://www.ian.com/affiliatecenter/include/V2/new/$FILE.zip
+    else    
+    	echo "Working on $FILE.txt ..."
+        ##wget  -t 30 --no-verbose -r -N -nd http://www.ian.com/affiliatecenter/include/V2/$FILE.zip
+        curl -O http://www.ian.com/affiliatecenter/include/V2/$FILE.zip
+    fi
 	## unzip the files, save the exit value to check for errors
 	## BSD does not support same syntax, but there is no need in MAC OS as Linux (unzip -L `find -iname $FILE.zip`)
     echo "Working on $FILE.txt ..."
