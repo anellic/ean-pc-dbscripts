@@ -309,6 +309,17 @@ CREATE TABLE citycoordinateslist
 	PRIMARY KEY (RegionID)
 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
+DROP TABLE IF EXISTS trainmetrostationcoordinateslist;
+CREATE TABLE trainmetrostationcoordinateslist
+(
+	RegionID 	BIGINT NOT NULL,
+	RegionName 	VARCHAR(255),
+	RegionType 	VARCHAR(50),
+	Latitude 	numeric(9,6),
+	Longitude 	numeric(9,6),
+  TimeStamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	PRIMARY KEY (RegionID)
+) CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
 ## table to correct search term for a region
 ## notice there are NO spaces between words
