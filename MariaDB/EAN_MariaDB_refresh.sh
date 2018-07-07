@@ -1,7 +1,7 @@
 #!/bin/bash
 #########################################################################
-## other than the default of the MariaDB Command Lines installation    ## 
-## you will need to install:                                           ##   
+## other than the default of the MariaDB Command Lines installation    ##
+## you will need to install:                                           ##
 ## -> cURL                                                             ##
 ## -> unzip                                                            ##
 ## -> database client for MariaDB (MySQL client works)                 ##
@@ -18,7 +18,7 @@ STARTTIME=$(date +%s)
 CHKSUM_CMD=md5sum
 ## for Linux: MYSQL_DIR=/usr/bin/
 MYSQL_DIR=/usr/bin/
-# for simplicity I added the MYSQL bin path to the Windows 
+# for simplicity I added the MYSQL bin path to the Windows
 # path environment variable, for Windows set it to ""
 #MYSQL_DIR=""
 ##MySQL user, password, host (Server)
@@ -36,12 +36,17 @@ FILES_DIR=eanfiles
 ## Amount of days to keep in the log
 ## that track changes to ActivePropertyList
 LOG_DAYS=365
+
+## remove original zip file to reduce disk usage
+## 0=do not remove, 1=remove
+REMOVE_ZIP_FILE=0
+
 ### Import files ###
 #####################################
 # the list should match the tables ##
 # created by create_ean.sql script ##
 #####################################
-LANG=es_ES
+LANG=en_US
 FILES=(
 ActivePropertyList
 AirportCoordinatesList
@@ -119,10 +124,10 @@ do
     	CHKSUM_PREV=0
 	fi
     ## download the files via HTTP (no need for https)
-    if [[ "$FILE" =~ ^(TrainMetroStationCoordinatesList|RegionEANHotelIDMapping|RegionCenterCoordinatesList|ParentRegionList|NeighborhoodCoordinatesList|CityCoordinatesList|CountryList|AirportCoordinatesList)$ ]]; then 
+    if [[ "$FILE" =~ ^(TrainMetroStationCoordinatesList|RegionEANHotelIDMapping|RegionCenterCoordinatesList|ParentRegionList|NeighborhoodCoordinatesList|CityCoordinatesList|CountryList|AirportCoordinatesList)$ ]]; then
     	echo "Working on /new/$FILE.txt ..."
         curl -O http://www.ian.com/affiliatecenter/include/V2/new/$FILE.zip
-    else    
+    else
     	echo "Working on $FILE.txt ..."
         ##wget  -t 30 --no-verbose -r -N -nd http://www.ian.com/affiliatecenter/include/V2/$FILE.zip
         curl -O http://www.ian.com/affiliatecenter/include/V2/$FILE.zip
@@ -184,6 +189,10 @@ do
 			$CMDSP_MYSQL --execute="DELETE FROM log_activeproperty_changes WHERE TimeStamp < DATE_SUB(NOW(), INTERVAL $LOG_DAYS DAY);"
 			echo "Log for ActivePropertyBusinessModel done."
         fi
+    fi
+
+    if [ -f $FILE.zip && $REMOVE_ZIP_FILE -eq 1 ]; then
+        rm $FILE.zip
     fi
 done
 echo "Updates done."
