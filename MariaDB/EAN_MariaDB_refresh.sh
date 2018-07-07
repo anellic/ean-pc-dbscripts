@@ -191,7 +191,7 @@ do
         fi
     fi
 
-    if [ -f $FILE.zip && $REMOVE_ZIP_FILE -eq 1 ]; then
+    if [ -f $FILE.zip ] && [ $REMOVE_ZIP_FILE -eq 1 ]; then
         rm $FILE.zip
     fi
 done
